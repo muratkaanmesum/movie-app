@@ -31,7 +31,7 @@ defineProps({
       <header class="text-sm text-white font-bold truncate shadow">{{ name }}</header>
       <span class="text-xs text-gray-500">{{ date }}</span>
     </div>
-    <div class="absolute bottom-12 left-0 bg-black rounded-full">
+    <div class="absolute bottom-12 left-1 bg-black rounded-full">
       <div class="relative w-10 h-10">
         <svg class="w-full h-full" viewBox="0 0 36 36">
           <path
@@ -47,7 +47,7 @@ defineProps({
             :class="{
               'text-lime-400': rating > 70,
               'text-yellow-400': rating > 40 && rating <= 70,
-              'text-red-500': rating <= 40
+              'text-red-500': rating <= 40,
             }"
             stroke="currentColor"
             stroke-width="3"

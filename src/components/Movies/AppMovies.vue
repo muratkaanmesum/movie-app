@@ -7,12 +7,9 @@ import AppLoader from '../common/AppLoader.vue'
 const movieStore = useMovieStore()
 movieStore.fetchMovies()
 
-watch(
-  () => movieStore.page,
-  () => {
-    movieStore.fetchMovies()
-  },
-)
+watch([() => movieStore.page, () => movieStore.type], () => {
+  movieStore.fetchMovies()
+})
 </script>
 
 <template>

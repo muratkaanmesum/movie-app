@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppImage from './components/common/AppImage.vue'
-import AppMovies from './components/Movies/AppMovies.vue'
+import MovieCarousel from './components/Movies/MovieCarousel.vue'
 import Navbar from './components/Navbar/AppNavbar.vue'
 </script>
 
@@ -46,6 +46,6 @@ import Navbar from './components/Navbar/AppNavbar.vue'
     </div>
   </section>
   <main class="main-background pt-10 w-[90%] !m-auto">
-    <AppMovies />
+    <MovieCarousel />
   </main>
 </template>
