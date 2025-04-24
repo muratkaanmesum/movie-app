@@ -54,7 +54,7 @@ export const useMovieStore = defineStore('movie', {
       this.loading = true
       try {
         const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${this.type}?language=en-US&page=1`,
+          `https://api.themoviedb.org/3/movie/${this.type}?language=en-US`,
           {
             params: {
               include_adult: false,
