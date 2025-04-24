@@ -45,7 +45,7 @@ import Navbar from './components/Navbar/AppNavbar.vue'
       </div>
     </div>
   </section>
-  <main class="bg-white pt-10">
+  <main class="main-background pt-10 w-[90%] !m-auto">
     <AppMovies />
   </main>
 </template>

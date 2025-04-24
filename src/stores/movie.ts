@@ -21,12 +21,16 @@ interface Movie {
 interface MovieState {
   movies: Movie[]
   page: number
+  loading: boolean
+  error: boolean
 }
 
 export const useMovieStore = defineStore('movie', {
   state: (): MovieState => ({
     movies: [],
     page: 1,
+    loading: true,
+    error: false,
   }),
   getters: {
     getMovies(): Movie[] {
@@ -38,6 +42,7 @@ export const useMovieStore = defineStore('movie', {
       this.movies = data
     },
     async fetchMovies() {
+      this.loading = true
       try {
         const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
           params: {
@@ -56,12 +61,21 @@ export const useMovieStore = defineStore('movie', {
       } catch (error) {
         console.error(error)
       }
+      this.loading = false
     },
     incrementPage() {
-      this.page++
+      if (this.page >= 20) {
+        this.page = 1
+      } else {
+        this.page++
+      }
     },
     decrementPage() {
-      this.page--
+      if (this.page <= 1) {
+        this.page = 20
+      } else {
+        this.page--
+      }
     },
   },
 })
