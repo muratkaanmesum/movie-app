@@ -21,16 +21,29 @@ interface Movie {
 interface MovieState {
   movies: Movie[]
   page: number
+  loading: boolean
+  type: 'popular' | 'top_rated'
 }
 
 export const useMovieStore = defineStore('movie', {
   state: (): MovieState => ({
     movies: [],
     page: 1,
+    loading: true,
+    type: 'popular',
   }),
   getters: {
     getMovies(): Movie[] {
       return this.movies
+    },
+    getPage(): number {
+      return this.page
+    },
+    getLoading(): boolean {
+      return this.loading
+    },
+    getType(): 'popular' | 'top_rated' {
+      return this.type
     },
   },
   actions: {
@@ -38,30 +51,49 @@ export const useMovieStore = defineStore('movie', {
       this.movies = data
     },
     async fetchMovies() {
+      this.loading = true
       try {
-        const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
-          params: {
-            include_adult: false,
-            include_video: false,
-            language: 'en-US',
-            page: this.page,
-            sort_by: 'popularity.desc',
-            api_key: import.meta.env.VITE_API_KEY,
+        const response = await axios.get(
+          `https://api.themoviedb.org/3/movie/${this.type}?language=en-US`,
+          {
+            params: {
+              include_adult: false,
+              include_video: false,
+              language: 'en-US',
+              page: this.page,
+              sort_by: 'popularity.desc',
+              api_key: import.meta.env.VITE_API_KEY,
+            },
+            headers: {
+              accept: 'application/json',
+            },
           },
-          headers: {
-            accept: 'application/json',
-          },
-        })
+        )
         this.setMovies(response.data.results)
       } catch (error) {
         console.error(error)
       }
+      this.loading = false
     },
     incrementPage() {
-      this.page++
+      if (this.page >= 20) {
+        this.page = 1
+      } else {
+        this.page++
+      }
     },
     decrementPage() {
-      this.page--
+      if (this.page <= 1) {
+        this.page = 20
+      } else {
+        this.page--
+      }
+    },
+    setType(type: 'popular' | 'top_rated') {
+      if (this.type === type) {
+        return
+      }
+      this.type = type
     },
   },
 })
