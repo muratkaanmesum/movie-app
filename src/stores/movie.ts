@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { movieApi } from '@/utils/utils'
 import { defineStore } from 'pinia'
 
 interface Movie {
@@ -53,22 +53,19 @@ export const useMovieStore = defineStore('movie', {
     async fetchMovies() {
       this.loading = true
       try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${this.type}?language=en-US`,
-          {
-            params: {
-              include_adult: false,
-              include_video: false,
-              language: 'en-US',
-              page: this.page,
-              sort_by: 'popularity.desc',
-              api_key: import.meta.env.VITE_API_KEY,
-            },
-            headers: {
-              accept: 'application/json',
-            },
+        const response = await movieApi.get(`/movie/${this.type}?language=en-US`, {
+          params: {
+            include_adult: false,
+            include_video: false,
+            language: 'en-US',
+            page: this.page,
+            sort_by: 'popularity.desc',
+            api_key: import.meta.env.VITE_API_KEY,
           },
-        )
+          headers: {
+            accept: 'application/json',
+          },
+        })
         this.setMovies(response.data.results)
       } catch (error) {
         console.error(error)

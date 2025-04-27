@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import AppImage from '../common/AppImage.vue'
+import AppRating from '../common/AppRating.vue'
+import { useFavoritesStore } from '@/stores/favorites'
 
 defineProps({
   name: {
@@ -19,11 +21,29 @@ defineProps({
     type: Number,
     default: 0,
   },
+  id: {
+    type: Number,
+    default: 0,
+  },
 })
+
+const favoritesStore = useFavoritesStore()
 </script>
 
 <template>
   <div class="h-full w-36 min-w-[144px] flex-shrink-0 relative">
+    <button
+      @click="favoritesStore.toggleFavorite(id)"
+      class="absolute top-2 right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center"
+    >
+      <img
+        v-if="favoritesStore.isFavorite(id)"
+        src="@/assets/star-blue.svg"
+        class="w-4 h-4"
+        alt="Favorite"
+      />
+      <img v-else src="@/assets/star-black.svg" class="w-4 h-4" alt="Not favorite" />
+    </button>
     <div class="mb-2">
       <AppImage :src="imageUrl" class="w-full h-auto rounded-md" />
     </div>
@@ -31,37 +51,8 @@ defineProps({
       <header class="text-sm text-white font-bold truncate shadow">{{ name }}</header>
       <span class="text-xs text-gray-500">{{ date }}</span>
     </div>
-    <div class="absolute bottom-12 left-1 bg-black rounded-full">
-      <div class="relative w-10 h-10">
-        <svg class="w-full h-full" viewBox="0 0 36 36">
-          <path
-            class="text-gray-700"
-            stroke="currentColor"
-            stroke-width="3"
-            fill="none"
-            d="M18 2.0845
-               a 15.9155 15.9155 0 0 1 0 31.831
-               a 15.9155 15.9155 0 0 1 0 -31.831"
-          />
-          <path
-            :class="{
-              'text-lime-400': rating > 70,
-              'text-yellow-400': rating > 40 && rating <= 70,
-              'text-red-500': rating <= 40,
-            }"
-            stroke="currentColor"
-            stroke-width="3"
-            :stroke-dasharray="`${rating}, 100`"
-            fill="none"
-            d="M18 2.0845
-               a 15.9155 15.9155 0 0 1 0 31.831
-               a 15.9155 15.9155 0 0 1 0 -31.831"
-          />
-        </svg>
-        <div class="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">
-          {{ rating }}%
-        </div>
-      </div>
+    <div class="absolute bottom-12 left-1">
+      <AppRating :rating="rating" />
     </div>
   </div>
 </template>
