@@ -19,10 +19,8 @@ defineProps({
   },
 })
 
-// Emit search event when form is submitted
 const emit = defineEmits(['search'])
 
-// Handle form submission
 const handleSubmit = (event: Event) => {
   event.preventDefault()
   const form = event.target as HTMLFormElement
