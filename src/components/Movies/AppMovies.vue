@@ -14,7 +14,7 @@ watch([() => movieStore.page, () => movieStore.type], () => {
 
 <template>
   <div
-    class="flex flex-col justify-center w-full items-center overflow-hidden overflow-x-auto scrollbar-thin scrollbar-thumb-white"
+    class="flex flex-col justify-center w-full items-center overflow-hidden overflow-x-auto scrollbar-thin scrollbar-thumb-white min-h-[270px]"
   >
     <AppLoader :state="movieStore.loading" :color="'black'" />
     <div class="w-full" v-show="!movieStore.loading">
