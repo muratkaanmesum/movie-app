@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import AppImage from './components/common/AppImage.vue'
 import MovieCarousel from './components/Movies/MovieCarousel.vue'
 import Navbar from './components/Navbar/AppNavbar.vue'
 import SearchForm from './components/common/SearchForm.vue'
+import { debounce } from '@/utils/utils.ts'
 
-const handleSearch = (query: string) => {
+const handleSearch = debounce((query: string) => {
   console.log('Searching for:', query)
-}
+}, 500)
 </script>
 
 <template>
   <header>
     <Navbar />
   </header>
+
   <section>
     <div
       class="w-full h-96 bg-cover bg-center bg-no-repeat flex items-center justify-center"
