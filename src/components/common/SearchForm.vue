@@ -22,59 +22,61 @@ defineProps({
   },
 })
 
-const emit = defineEmits(['search'])
-const showResults = ref(false)
-const searchValue = ref('')
-
-// Temporary search results for the dropdown
-const searchResults = ref([
-  { id: 1, title: 'The Shawshank Redemption', type: 'movie' },
-  { id: 2, title: 'The Godfather', type: 'movie' },
-  { id: 3, title: 'The Dark Knight', type: 'movie' },
-  { id: 4, title: 'Breaking Bad', type: 'tv' },
-  { id: 5, title: 'Tom Hanks', type: 'person' },
-])
+const emit = defineEmits(['search', 'blur'])
+const inputValue = ref('')
 
 const handleInput = debounce((event: Event) => {
   const input = event.target as HTMLInputElement
-  searchValue.value = input.value
-  
-  if (input.value.trim()) {
-    showResults.value = true
-  } else {
-    showResults.value = false
-  }
-  
+  inputValue.value = input.value
   emit('search', input.value)
 }, 500)
 
 const handleSubmit = (event: Event) => {
   event.preventDefault()
-  const form = event.target as HTMLFormElement
-  const input = form.querySelector('input') as HTMLInputElement
-  emit('search', input.value)
-  showResults.value = false
+  emit('search', inputValue.value)
 }
 
-const selectResult = (result: any) => {
-  searchValue.value = result.title
-  emit('search', result.title)
-  showResults.value = false
+const handleBlur = () => {
+  emit('blur')
 }
 
-// Close dropdown when clicking outside
-const closeResults = () => {
-  setTimeout(() => {
-    showResults.value = false
-  }, 200)
+const clearSearch = () => {
+  inputValue.value = ''
+  emit('search', '')
 }
 </script>
 
 <template>
   <form class="relative" @submit="handleSubmit">
-    <input type="text" :class="inputClass" :placeholder="placeholder" @input="handleInput" />
+    <input
+      type="text"
+      :class="inputClass"
+      :placeholder="placeholder"
+      @input="handleInput"
+      @blur="handleBlur"
+      v-model="inputValue"
+    />
+    <div class="absolute right-0 h-full flex items-center" v-if="inputValue">
+      <button type="button" class="text-gray-400 hover:text-gray-600 mx-2" @click="clearSearch">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+      </button>
+    </div>
     <button
-      v-if="showButton"
+      v-if="showButton && !inputValue"
       class="absolute right-0 bg-gradient-to-r h-full from-green-400 to-blue-400 text-white font-medium px-6 py-2 rounded-full shadow-md"
     >
       {{ buttonText }}
