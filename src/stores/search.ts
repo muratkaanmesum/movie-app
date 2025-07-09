@@ -81,7 +81,7 @@ export const useSearchStore = defineStore('search', () => {
   const closeResults = () => {
     setTimeout(() => {
       showResults.value = false
-    }, 200)
+    }, 150)
   }
 
   return {
